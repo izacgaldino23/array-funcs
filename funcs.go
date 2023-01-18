@@ -2,13 +2,15 @@ package arrayfuncs
 
 type Array[T any] []T
 
+// At return an element based on index
+// accepts negative index, representing decend way
 func (l *Array[T]) At(index int) (res *T) {
-	// if the index passed is greather than elements count will return nil
+	// if the index passed is greater than elements count will return nil
 	if index >= len(*l) {
 		return
 	}
 
-	// If the index is negative whe will count back foward
+	//If the index is negative when will count back forward
 	if index < 0 {
 		for index < 0 {
 			index = len(*l) + index
@@ -20,6 +22,12 @@ func (l *Array[T]) At(index int) (res *T) {
 	return
 }
 
+/*
+Concat return a new Array[T] with the Arrays elements
+	a := Array[int]{1, 2}
+	b := Array[int]{3, 4}
+	c := a.Concat(&b) // c is a new Array[int] it value is {1, 2, 3, 4}
+*/
 func (l *Array[T]) Concat(values ...*Array[T]) (res Array[T]) {
 	res = *l
 
