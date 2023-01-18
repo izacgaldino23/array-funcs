@@ -35,6 +35,28 @@ func TestSlice(t *testing.T) {
 		})
 	})
 
+	t.Run("TestConcat", func(t *testing.T) {
+		var (
+			// Array create
+			a = arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+			b = arrayFuncs.Array[int]{6, 7, 8, 9, 10}
+		)
+
+		c := a.Concat(&b)
+
+		// Test new length
+		assert.Equal(t, len(c), len(a)+len(b))
+
+		// Test elements
+		for i := range a {
+			assert.Equal(t, a[i], c[i])
+		}
+
+		for i := range b {
+			assert.Equal(t, b[i], c[i+len(b)])
+		}
+	})
+
 	t.Run("TestMap", func(t *testing.T) {
 		// criação do slice
 		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}

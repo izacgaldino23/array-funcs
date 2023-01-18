@@ -20,7 +20,17 @@ func (l *Array[T]) At(index int) (res *T) {
 	return
 }
 
-func (l *Array[T]) Concat() {}
+func (l *Array[T]) Concat(values ...*Array[T]) (res Array[T]) {
+	res = *l
+
+	for _, v := range values {
+		for j := range *v {
+			res = append(res, (*v)[j])
+		}
+	}
+
+	return
+}
 
 func (l *Array[T]) CopyWithin() {}
 
