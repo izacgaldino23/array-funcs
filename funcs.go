@@ -2,7 +2,23 @@ package arrayfuncs
 
 type Array[T any] []T
 
-func (l *Array[T]) At() {}
+func (l *Array[T]) At(index int) (res *T) {
+	// if the index passed is greather than elements count will return nil
+	if index >= len(*l) {
+		return
+	}
+
+	// If the index is negative whe will count back foward
+	if index < 0 {
+		for index < 0 {
+			index = len(*l) + index
+		}
+	}
+
+	res = &(*l)[index]
+
+	return
+}
 
 func (l *Array[T]) Concat() {}
 
