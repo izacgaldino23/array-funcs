@@ -135,31 +135,54 @@ func TestSlice(t *testing.T) {
 	t.Run("TestFind", func(t *testing.T) {
 		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
 
-		res := s.Find(func(v *int, i int) bool {
+		find := func(v *int, i int) bool {
 			return *v == 3
-		})
+		}
 
-		assert.Equal(t, res, 3)
+		assert.Equal(t, *s.Find(find), 3)
+
+		notFind := func(v *int, i int) bool {
+			return *v == 10
+		}
+
+		// Not found
+		assert.Nil(t, s.Find(notFind))
 	})
 
 	t.Run("TestFindIndex", func(t *testing.T) {
 		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
 
-		res := s.FindIndex(func(v *int, i int) bool {
+		find := func(v *int, i int) bool {
 			return *v == 3
-		})
+		}
 
-		assert.Equal(t, res, 2)
+		notFind := func(v *int, i int) bool {
+			return *v == 10
+		}
+
+		// Find
+		assert.Equal(t, *s.FindIndex(find), 2)
+
+		// Not Found
+		assert.Nil(t, s.FindIndex(notFind))
 	})
 
 	t.Run("TestFindLastIndex", func(t *testing.T) {
 		s := arrayFuncs.Array[int]{1, 2, 3, 3, 5}
 
-		res := s.FindLastIndex(func(v *int, i int) bool {
+		find := func(v *int, i int) bool {
 			return *v == 3
-		})
+		}
 
-		assert.Equal(t, res, 3)
+		notFind := func(v *int, i int) bool {
+			return *v == 10
+		}
+
+		// Find
+		assert.Equal(t, *s.FindLastIndex(find), 3)
+
+		// Not Found
+		assert.Nil(t, s.FindLastIndex(notFind))
 	})
 
 	t.Run("model", func(t *testing.T) {})

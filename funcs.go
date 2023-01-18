@@ -116,18 +116,22 @@ func (l *Array[T]) Filter(callback func(v *T, i int) bool) (res []T) {
 }
 
 // Find return the first element that satisfy the callback condidition
-func (l *Array[T]) Find(callback func(v *T, i int) bool) (res T) {
+func (l *Array[T]) Find(callback func(v *T, i int) bool) (res *T) {
 	index := l.FindIndex(callback)
-	res = (*l)[index]
+
+	if index != nil {
+		res = &(*l)[*index]
+	}
 
 	return
 }
 
 // FindIndex return the index of the first element that satisfy the callback condidition
-func (l *Array[T]) FindIndex(callback func(v *T, i int) bool) (res int) {
+// Return nil if not found any elements thath matches with the condition
+func (l *Array[T]) FindIndex(callback func(v *T, i int) bool) (res *int) {
 	for index := range *l {
 		if callback(&(*l)[index], index) {
-			res = index
+			res = &index
 			break
 		}
 	}
@@ -136,10 +140,11 @@ func (l *Array[T]) FindIndex(callback func(v *T, i int) bool) (res int) {
 }
 
 // FindIndex return the index of the last element that satisfy the callback condidition
-func (l *Array[T]) FindLastIndex(callback func(v *T, i int) bool) (res int) {
+// Return nil if not found any elements thath matches with the condition
+func (l *Array[T]) FindLastIndex(callback func(v *T, i int) bool) (res *int) {
 	for index := len(*l) - 1; index >= 0; index-- {
 		if callback(&(*l)[index], index) {
-			res = index
+			res = &index
 			break
 		}
 	}
