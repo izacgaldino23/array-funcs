@@ -9,6 +9,16 @@ import (
 
 func TestSlice(t *testing.T) {
 
+	t.Run("TestAnyToArrayKind", func(t *testing.T) {
+		originalKind := []int{1, 2, 3, 4}
+
+		new := arrayFuncs.AnyToArrayKind(originalKind)
+
+		for i := range originalKind {
+			assert.Equal(t, originalKind[i], new[i])
+		}
+	})
+
 	t.Run("TestToOriginalKind", func(t *testing.T) {
 		// Array create
 		a := arrayFuncs.Array[int]{1, 2, 3, 4, 5}

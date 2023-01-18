@@ -3,6 +3,20 @@ package arrayfuncs
 type Array[T any] []T
 
 /*
+AnyToArrayKind receive a slice of T kind and return a Array[T]
+	[]int will return Array[int]
+*/
+func AnyToArrayKind[T any](input []T) (res Array[T]) {
+	res = make(Array[T], 0)
+
+	for i := range input {
+		res = append(res, input[i])
+	}
+
+	return
+}
+
+/*
 ToOriginalKind return a slice with the original kind of array
 	Array[int] will return []int
 */
