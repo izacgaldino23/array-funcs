@@ -84,8 +84,25 @@ func (l *Array[T]) Every(callback func(v *T, i int) bool) bool {
 	return true
 }
 
-func (l *Array[T]) Fill() {}
+/*
+Fill set value passed on first parameter to start (position) to the end.
+If end not passed will set element to index start until the last element
+*/
+func (l *Array[T]) Fill(value T, start int, end ...int) *Array[T] {
+	endPosition := len(*l) - 1
 
+	if len(end) > 0 && end[0] < endPosition {
+		endPosition = end[0]
+	}
+
+	for i := start; i <= endPosition; i++ {
+		(*l)[i] = value
+	}
+
+	return l
+}
+
+// Filter return the elements that satisfy the callback condition
 func (l *Array[T]) Filter(callback func(v *T, i int) bool) (res []T) {
 	res = make([]T, 0)
 
@@ -98,6 +115,7 @@ func (l *Array[T]) Filter(callback func(v *T, i int) bool) (res []T) {
 	return res
 }
 
+// Find return the first element that satisfy the callback condidition
 func (l *Array[T]) Find(callback func(v *T, i int) bool) (res T) {
 	for index := range *l {
 		if callback(&(*l)[index], index) {

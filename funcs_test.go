@@ -96,6 +96,52 @@ func TestSlice(t *testing.T) {
 		assert.False(t, a.Every(dontPass))
 	})
 
+	t.Run("TestFill", func(t *testing.T) {
+		var (
+			a       = arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+			b       = arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+			result1 = []int{1, 2, 10, 10, 10}
+			result2 = []int{1, 2, 10, 10, 5}
+		)
+
+		// Test without end
+		a.Fill(10, 2)
+		for i := range a {
+			assert.Equal(t, a[i], result1[i])
+		}
+
+		// Test with end
+		b.Fill(10, 2, 3)
+		for i := range b {
+			assert.Equal(t, b[i], result2[i])
+		}
+	})
+
+	t.Run("TestFilter", func(t *testing.T) {
+		// Array create
+		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+
+		res := s.Filter(func(v *int, i int) bool {
+			return *v > 3
+		})
+
+		assert.Equal(t, len(res), 2)
+
+		assert.Equal(t, res[0], 4)
+
+		assert.Equal(t, res[1], 5)
+	})
+
+	t.Run("TestFind", func(t *testing.T) {
+		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+
+		res := s.Find(func(v *int, i int) bool {
+			return *v == 3
+		})
+
+		assert.Equal(t, res, 3)
+	})
+
 	t.Run("model", func(t *testing.T) {})
 
 	t.Run("TestMap", func(t *testing.T) {
@@ -109,31 +155,5 @@ func TestSlice(t *testing.T) {
 		for i, v := range s {
 			assert.Equal(t, (i+1)*2, v)
 		}
-	})
-
-	t.Run("TestFilter", func(t *testing.T) {
-		// criação do slice
-		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
-		// aplicação do filter
-		res := s.Filter(func(v *int, i int) bool {
-			return *v > 3
-		})
-		// verificação se o filter foi aplicado corretamente
-		assert.Equal(t, len(res), 2)
-
-		assert.Equal(t, res[0], 4)
-
-		assert.Equal(t, res[1], 5)
-	})
-
-	t.Run("TestFind", func(t *testing.T) {
-		// criação do slice
-		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
-		// aplicação do find
-		res := s.Find(func(v *int, i int) bool {
-			return *v == 3
-		})
-		// verificação se o find foi aplicado corretamente
-		assert.Equal(t, res, 3)
 	})
 }
