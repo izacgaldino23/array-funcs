@@ -2,6 +2,20 @@ package arrayfuncs
 
 type Array[T any] []T
 
+/*
+ToOriginalKind return a slice with the original kind of array
+	Array[int] will return []int
+*/
+func (l *Array[T]) ToOriginalKind() (res []T) {
+	res = make([]T, 0)
+
+	for i := range *l {
+		res = append(res, (*l)[i])
+	}
+
+	return
+}
+
 // At return an element based on index
 // accepts negative index, representing decend way
 func (l *Array[T]) At(index int) (res *T) {
