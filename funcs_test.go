@@ -142,6 +142,26 @@ func TestSlice(t *testing.T) {
 		assert.Equal(t, res, 3)
 	})
 
+	t.Run("TestFindIndex", func(t *testing.T) {
+		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+
+		res := s.FindIndex(func(v *int, i int) bool {
+			return *v == 3
+		})
+
+		assert.Equal(t, res, 2)
+	})
+
+	t.Run("TestFindLastIndex", func(t *testing.T) {
+		s := arrayFuncs.Array[int]{1, 2, 3, 3, 5}
+
+		res := s.FindLastIndex(func(v *int, i int) bool {
+			return *v == 3
+		})
+
+		assert.Equal(t, res, 3)
+	})
+
 	t.Run("model", func(t *testing.T) {})
 
 	t.Run("TestMap", func(t *testing.T) {
