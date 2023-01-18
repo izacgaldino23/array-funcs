@@ -57,6 +57,27 @@ func TestSlice(t *testing.T) {
 		}
 	})
 
+	t.Run("TestEvery", func(t *testing.T) {
+		// Array create
+		a := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+
+		pass := func(v *int, index int) bool {
+			return *v < 6
+		}
+
+		dontPass := func(v *int, index int) bool {
+			return *v < 3
+		}
+
+		// All results are under 6
+		assert.True(t, a.Every(pass))
+
+		// Some values are greater then 3
+		assert.False(t, a.Every(dontPass))
+	})
+
+	t.Run("model", func(t *testing.T) {})
+
 	t.Run("TestMap", func(t *testing.T) {
 		// criação do slice
 		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}

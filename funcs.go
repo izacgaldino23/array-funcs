@@ -44,7 +44,17 @@ func (l *Array[T]) CopyWithin() {}
 
 func (l *Array[T]) Entries() {}
 
-func (l *Array[T]) Every() {}
+// Every return true if all elements pass in the test passed by callback function
+// If one element reprove the callback condition will return false
+func (l *Array[T]) Every(callback func(v *T, i int) bool) bool {
+	for i := range *l {
+		if !callback(&(*l)[i], i) {
+			return false
+		}
+	}
+
+	return true
+}
 
 func (l *Array[T]) Fill() {}
 
