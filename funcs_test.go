@@ -227,10 +227,14 @@ func TestSlice(t *testing.T) {
 
 	t.Run("TestGroup", func(t *testing.T) {
 		var (
-			a = arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+			a = arrayFuncs.Array[int]{0, 1, 2, 3, 4, 5}
 		)
 
 		group := a.Group(func(value, index int) any {
+			if value == 0 {
+				return nil
+			}
+
 			kind := "odd"
 
 			if value%2 == 0 {
