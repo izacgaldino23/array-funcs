@@ -1,12 +1,12 @@
 package arrayfuncs
 
-type Array[T any] []T
+type Array[T comparable] []T
 
 /*
 AnyToArrayKind receive a slice of T kind and return a Array[T]
 	[]int will return Array[int]
 */
-func AnyToArrayKind[T any](input []T) (res Array[T]) {
+func AnyToArrayKind[T comparable](input []T) (res Array[T]) {
 	res = make(Array[T], 0)
 
 	for i := range input {
@@ -184,6 +184,7 @@ func (l *Array[T]) ForEach(callback func(value T, index int, array *[]T)) {
 /*
 Group return a map of the groupd elements by anything, a fields or a value
 The callback function must return the value that will be used to group the elements
+If the callback condition returns nil the element won't be added to any group
 */
 func (l *Array[T]) Group(callback func(value T, index int) any) map[any]Array[T] {
 	group := make(map[any]Array[T])
@@ -191,6 +192,10 @@ func (l *Array[T]) Group(callback func(value T, index int) any) map[any]Array[T]
 	for i := range *l {
 		v := &(*l)[i]
 		groupName := callback(*v, i)
+
+		if groupName == nil {
+			continue
+		}
 
 		if _, ok := group[groupName]; !ok {
 			group[groupName] = Array[T]{*v}
@@ -202,11 +207,30 @@ func (l *Array[T]) Group(callback func(value T, index int) any) map[any]Array[T]
 	return group
 }
 
-func (l *Array[T]) GroupToMap() {}
+// Includes verify if an element exists in this Array
+// If you need to verify a field of a struct, use other functions like find or filter
+func (l *Array[T]) Includes(value T) bool {
+	for i := range *l {
+		if (*l)[i] == value {
+			return true
+		}
+	}
 
-func (l *Array[T]) Includes() {}
+	return false
+}
 
-func (l *Array[T]) IndexOf() {}
+// IndexOf return the first index of the elements that matches with the value parameter
+func (l *Array[T]) IndexOf(value T) int {
+	res := l.FindIndex(func(v *T, i int) bool {
+		return *v == value
+	})
+
+	if res == nil {
+		return -1
+	}
+
+	return *res
+}
 
 func (l *Array[T]) Join() {}
 

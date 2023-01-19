@@ -251,6 +251,28 @@ func TestSlice(t *testing.T) {
 		}
 	})
 
+	t.Run("TestIncludes", func(t *testing.T) {
+		var (
+			a = arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+		)
+
+		// Include
+		assert.True(t, a.Includes(5))
+
+		// Doesn't include
+		assert.False(t, a.Includes(0))
+	})
+
+	t.Run("TestIndexOf", func(t *testing.T) {
+		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+
+		// Find
+		assert.Equal(t, s.IndexOf(2), 1)
+
+		// Not Found
+		assert.Equal(t, s.IndexOf(6), -1)
+	})
+
 	t.Run("model", func(t *testing.T) {})
 
 	t.Run("TestMap", func(t *testing.T) {
