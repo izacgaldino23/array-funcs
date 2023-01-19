@@ -225,6 +225,32 @@ func TestSlice(t *testing.T) {
 		assert.Equal(t, len(a), 10)
 	})
 
+	t.Run("TestGroup", func(t *testing.T) {
+		var (
+			a = arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+		)
+
+		group := a.Group(func(value, index int) any {
+			kind := "odd"
+
+			if value%2 == 0 {
+				kind = "even"
+			}
+
+			return kind
+		})
+
+		for i := range group {
+			for j := range group[i] {
+				if i == "odd" {
+					assert.Equal(t, group[i][j]%2, 1)
+				} else {
+					assert.Equal(t, group[i][j]%2, 0)
+				}
+			}
+		}
+	})
+
 	t.Run("model", func(t *testing.T) {})
 
 	t.Run("TestMap", func(t *testing.T) {

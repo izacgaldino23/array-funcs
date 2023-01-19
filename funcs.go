@@ -181,7 +181,26 @@ func (l *Array[T]) ForEach(callback func(value T, index int, array *[]T)) {
 	*l = AnyToArrayKind(origintalKind)
 }
 
-func (l *Array[T]) Group() {}
+/*
+Group return a map of the groupd elements by anything, a fields or a value
+The callback function must return the value that will be used to group the elements
+*/
+func (l *Array[T]) Group(callback func(value T, index int) any) map[any]Array[T] {
+	group := make(map[any]Array[T])
+
+	for i := range *l {
+		v := &(*l)[i]
+		groupName := callback(*v, i)
+
+		if _, ok := group[groupName]; !ok {
+			group[groupName] = Array[T]{*v}
+		} else {
+			group[groupName] = append(group[groupName], *v)
+		}
+	}
+
+	return group
+}
 
 func (l *Array[T]) GroupToMap() {}
 
