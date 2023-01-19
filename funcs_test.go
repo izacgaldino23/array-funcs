@@ -167,6 +167,23 @@ func TestSlice(t *testing.T) {
 		assert.Nil(t, s.FindIndex(notFind))
 	})
 
+	t.Run("TestFindLast", func(t *testing.T) {
+		s := arrayFuncs.Array[int]{1, 2, 3, 3, 5}
+
+		find := func(v *int, i int) bool {
+			return *v == 3
+		}
+
+		assert.Equal(t, *s.FindLast(find), 3)
+
+		notFind := func(v *int, i int) bool {
+			return *v == 10
+		}
+
+		// Not found
+		assert.Nil(t, s.Find(notFind))
+	})
+
 	t.Run("TestFindLastIndex", func(t *testing.T) {
 		s := arrayFuncs.Array[int]{1, 2, 3, 3, 5}
 
@@ -183,6 +200,29 @@ func TestSlice(t *testing.T) {
 
 		// Not Found
 		assert.Nil(t, s.FindLastIndex(notFind))
+	})
+
+	t.Run("TestForEach", func(t *testing.T) {
+		var (
+			a     = arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+			sum   = 0
+			total = 15
+		)
+
+		// Basic sum and compare result
+		a.ForEach(func(value, index int, array *[]int) {
+			sum += value
+		})
+
+		assert.Equal(t, sum, total)
+
+		// Alter the original Array
+		a.ForEach(func(value, index int, array *[]int) {
+			*array = append(*array, value+1)
+		})
+
+		// Test if the elementes count is changed to double
+		assert.Equal(t, len(a), 10)
 	})
 
 	t.Run("model", func(t *testing.T) {})

@@ -139,6 +139,17 @@ func (l *Array[T]) FindIndex(callback func(v *T, i int) bool) (res *int) {
 	return
 }
 
+// Find return the last element that satisfy the callback condidition
+func (l *Array[T]) FindLast(callback func(v *T, i int) bool) (res *T) {
+	index := l.FindLastIndex(callback)
+
+	if index != nil {
+		res = &(*l)[*index]
+	}
+
+	return
+}
+
 // FindIndex return the index of the last element that satisfy the callback condidition
 // Return nil if not found any elements thath matches with the condition
 func (l *Array[T]) FindLastIndex(callback func(v *T, i int) bool) (res *int) {
@@ -152,11 +163,25 @@ func (l *Array[T]) FindLastIndex(callback func(v *T, i int) bool) (res *int) {
 	return
 }
 
+// Flat Cannot be implemented because we can't mix types inside Array
 func (l *Array[T]) Flat() {}
 
+// FlatMap Cannot be implemented because we can't mix types inside Array
 func (l *Array[T]) FlatMap() {}
 
-func (l *Array[T]) ForEach() {}
+// ForEach loop by the Array without modificate the elements.
+// But the last argument is the pointer to Array that can be modified
+func (l *Array[T]) ForEach(callback func(value T, index int, array *[]T)) {
+	origintalKind := l.ToOriginalKind()
+
+	for i := range *l {
+		callback((*l)[i], i, &origintalKind)
+	}
+
+	*l = AnyToArrayKind(origintalKind)
+}
+
+func (l *Array[T]) Group() {}
 
 func (l *Array[T]) GroupToMap() {}
 
