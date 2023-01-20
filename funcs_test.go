@@ -319,7 +319,7 @@ func TestSlice(t *testing.T) {
 		// criação do slice
 		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
 		// aplicação do map
-		s.Map(func(i int, v *int) {
+		s.Map(func(v *int, i int) {
 			*v = *v * 2
 		})
 		// verificação se o map foi aplicado corretamente

@@ -1,11 +1,15 @@
 package arrayfuncs
 
-import "strings"
+import (
+	"strings"
+)
 
+// Array is a base array of any type that has many usable functions
 type Array[T comparable] []T
 
 /*
-➡ AnyToArrayKind receive a slice of T kind and return a Array[T]
+AnyToArrayKind receive a slice of T kind and return a Array[T]
+
 	[]int will return Array[int]
 */
 func AnyToArrayKind[T comparable](input []T) (res Array[T]) {
@@ -19,7 +23,8 @@ func AnyToArrayKind[T comparable](input []T) (res Array[T]) {
 }
 
 /*
-➡ ToOriginalKind return a slice with the original kind of array
+ToOriginalKind return a slice with the original kind of array
+
 	Array[int] will return []int
 */
 func (l *Array[T]) ToOriginalKind() (res []T) {
@@ -53,7 +58,8 @@ func (l *Array[T]) At(index int) (res *T) {
 }
 
 /*
-➡ Concat return a new Array[T] with the Arrays elements
+Concat return a new Array[T] with the Arrays elements
+
 	a := Array[int]{1, 2}
 	b := Array[int]{3, 4}
 	c := a.Concat(&b) // c is a new Array[int] it value is {1, 2, 3, 4}
@@ -70,8 +76,10 @@ func (l *Array[T]) Concat(values ...*Array[T]) (res Array[T]) {
 	return
 }
 
+// CopyWithin not implemented yet
 func (l *Array[T]) CopyWithin() {}
 
+// Entries not implemented yet
 func (l *Array[T]) Entries() {}
 
 // Every return true if all elements pass in the test passed by callback function
@@ -139,7 +147,7 @@ func (l *Array[T]) FindIndex(callback func(v *T, i int) bool) (res *int) {
 	return
 }
 
-// Find return the last element that satisfy the callback condidition
+// FindLast return the last element that satisfy the callback condidition
 func (l *Array[T]) FindLast(callback func(v *T, i int) bool) (res *T) {
 	index := l.FindLastIndex(callback)
 
@@ -150,7 +158,7 @@ func (l *Array[T]) FindLast(callback func(v *T, i int) bool) (res *T) {
 	return
 }
 
-// FindIndex return the index of the last element that satisfy the callback condidition
+// FindLastIndex return the index of the last element that satisfy the callback condidition
 // Return nil if not found any elements thath matches with the condition
 func (l *Array[T]) FindLastIndex(callback func(v *T, i int) bool) (res *int) {
 	for index := len(*l) - 1; index >= 0; index-- {
@@ -233,11 +241,13 @@ func (l *Array[T]) IndexOf(value T) int {
 }
 
 /*
-➡ Join return a string like result of joining all values by a separator
+Join return a string like result of joining all values by a separator
+
 	a := Array[int]{1, 2, 3, 4, 5}
 	a.Join(" - ") // will return "1 - 2 - 3 - 4 - 5"
 
 ➡ If values are structs, it needs to be the function ToString implemented, returning a string value, Example:
+
 	type Temp struct {
 		msg string
 	}
@@ -280,9 +290,10 @@ func (l *Array[T]) LastIndexOf(value T) int {
 	return *res
 }
 
-func (l *Array[T]) Map(callback func(i int, v *T)) {
+// Map iterate all elements with a callback function that can change the original value
+func (l *Array[T]) Map(callback func(v *T, i int)) {
 	for index := range *l {
-		callback(index, &(*l)[index])
+		callback(&(*l)[index], index)
 	}
 }
 
@@ -313,10 +324,11 @@ func (l *Array[T]) Push(values ...T) {
 }
 
 /*
-➡ Reduce iterate all elements one by one and execute a callback that must return a value to be used on the next iteration.
+Reduce iterate all elements one by one and execute a callback that must return a value to be used on the next iteration.
 
 ➡ In the first iteration the accumulator will be nil.
 If the initial values is passed, in the first iteration the accumulator value is seted with the initial value
+
 	s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
 
 	sumFunction := func(accumulator any, currentValue, currentIndex int) any {
@@ -324,6 +336,7 @@ If the initial values is passed, in the first iteration the accumulator value is
 	}
 
 	result := s.Reduce(sumFunction, 0) // Result will be 0 + 1 + 2 + 3 + 4 + 5 = 15
+
 ➡ If you want right to left use ReduceRight func
 */
 func (l *Array[T]) Reduce(callback func(accumulator any, currentValue T, currentIndex int) any, initialValue ...any) (accumulated any) {
@@ -339,10 +352,11 @@ func (l *Array[T]) Reduce(callback func(accumulator any, currentValue T, current
 }
 
 /*
-➡ ReduceRight iterate all elements one by one right to left and execute a callback that must return a value to be used on the next iteration.
+ReduceRight iterate all elements one by one right to left and execute a callback that must return a value to be used on the next iteration.
 
 ➡ In the first iteration the accumulator will be nil.
 If the initial values is passed, in the first iteration the accumulator value is seted with the initial value
+
 	s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
 
 	sumFunction := func(accumulator any, currentValue, currentIndex int) any {

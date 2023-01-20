@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+// AnyToString parse almost all values to string
 func AnyToString(value any) (converted string) {
 	if value == nil {
 		return
