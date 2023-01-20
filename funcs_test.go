@@ -29,15 +29,6 @@ func TestSlice(t *testing.T) {
 		}
 	})
 
-	t.Run("TestAppend", func(t *testing.T) {
-		// Array create
-		a := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
-
-		a.Append(6, 7)
-
-		assert.Equal(t, 7, len(a))
-	})
-
 	t.Run("TestAt", func(t *testing.T) {
 		// Array create
 		a := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
@@ -304,7 +295,25 @@ func TestSlice(t *testing.T) {
 		assert.Equal(t, "hello-world", d.Join(separator))
 	})
 
-	t.Run("model", func(t *testing.T) {})
+	t.Run("TestKeys", func(t *testing.T) {
+		a := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+		expected := []int{0, 1, 2, 3, 4}
+		result := a.Keys()
+
+		for i := range result {
+			assert.Equal(t, expected[i], result[i])
+		}
+	})
+
+	t.Run("TestLastIndexOf", func(t *testing.T) {
+		s := arrayFuncs.Array[int]{1, 2, 3, 2, 5}
+
+		// Find
+		assert.Equal(t, s.LastIndexOf(2), 3)
+
+		// Not Found
+		assert.Equal(t, s.LastIndexOf(6), -1)
+	})
 
 	t.Run("TestMap", func(t *testing.T) {
 		// criação do slice
@@ -317,5 +326,47 @@ func TestSlice(t *testing.T) {
 		for i, v := range s {
 			assert.Equal(t, (i+1)*2, v)
 		}
+	})
+
+	t.Run("TestPop", func(t *testing.T) {
+		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+
+		t.Run("ValidArray", func(t *testing.T) {
+			// Remove last element
+			removed := s.Pop()
+
+			// Check new length
+			assert.Equal(t, 4, len(s))
+
+			// Check the removed element
+			assert.NotNil(t, removed)
+			assert.Equal(t, 5, *removed)
+		})
+
+		t.Run("EmptyArray", func(t *testing.T) {
+			// Validate empty Array
+			s = arrayFuncs.Array[int]{}
+			removed := s.Pop()
+
+			// Check new length
+			assert.Equal(t, 0, len(s))
+
+			// Check the removed element
+			assert.Nil(t, removed)
+		})
+	})
+
+	t.Run("TestPush", func(t *testing.T) {
+		// Array create
+		a := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+
+		a.Push(6, 7)
+
+		assert.Equal(t, 7, len(a))
+	})
+
+	t.Run("model", func(t *testing.T) {
+		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+		_ = s
 	})
 }

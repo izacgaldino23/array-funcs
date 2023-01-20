@@ -32,12 +32,6 @@ func (l *Array[T]) ToOriginalKind() (res []T) {
 	return
 }
 
-func (l *Array[T]) Append(values ...T) {
-	new := AnyToArrayKind(values)
-
-	*l = l.Concat(&new)
-}
-
 // At return an element based on index
 // accepts negative index, representing decend way
 func (l *Array[T]) At(index int) (res *T) {
@@ -114,7 +108,7 @@ func (l *Array[T]) Fill(value T, start int, end ...int) *Array[T] {
 func (l *Array[T]) Filter(callback func(v *T, i int) bool) (res Array[T]) {
 	for index := range *l {
 		if callback(&(*l)[index], index) {
-			res.Append((*l)[index])
+			res.Push((*l)[index])
 		}
 	}
 
@@ -264,9 +258,27 @@ func (l *Array[T]) Join(separator string) (res string) {
 	return
 }
 
-func (l *Array[T]) Keys() {}
+// Keys return all keys from a Array
+func (l *Array[T]) Keys() (res []int) {
+	for i := range *l {
+		res = append(res, i)
+	}
 
-func (l *Array[T]) LastIndexOf() {}
+	return
+}
+
+// LastIndexOf return the last index of the elements that matches with the value parameter
+func (l *Array[T]) LastIndexOf(value T) int {
+	res := l.FindLastIndex(func(v *T, i int) bool {
+		return *v == value
+	})
+
+	if res == nil {
+		return -1
+	}
+
+	return *res
+}
 
 func (l *Array[T]) Map(callback func(i int, v *T)) {
 	for index := range *l {
@@ -274,9 +286,31 @@ func (l *Array[T]) Map(callback func(i int, v *T)) {
 	}
 }
 
-func (l *Array[T]) Pop() {}
+// Pop remove the last element from this array, and return it.
+// If the array is empty return nil
+func (l *Array[T]) Pop() (res *T) {
+	if len(*l) == 0 {
+		return
+	}
 
-func (l *Array[T]) Push() {}
+	// Get the index os the last element
+	end := len(*l) - 1
+
+	// Get the last element to return it
+	res = &(*l)[end]
+
+	// Remove the element from the Array
+	*l = (*l)[0:end]
+
+	return
+}
+
+// Push add onu or more elements to the end of an Array
+func (l *Array[T]) Push(values ...T) {
+	new := AnyToArrayKind(values)
+
+	*l = l.Concat(&new)
+}
 
 func (l *Array[T]) Reduce() {}
 
