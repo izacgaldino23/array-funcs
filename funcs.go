@@ -39,7 +39,7 @@ func (l *Array[T]) ToOriginalKind() (res []T) {
 }
 
 // At return an element based on index
-// accepts negative index, representing decend way
+// accepts negative index, representing descend way
 func (l *Array[T]) At(index int) (res *T) {
 	// if the index passed is greater than elements count will return nil
 	if index >= len(*l) {
@@ -124,7 +124,7 @@ func (l *Array[T]) Filter(callback func(v *T, i int) bool) (res Array[T]) {
 	return res
 }
 
-// Find return the first element that satisfy the callback condidition
+// Find return the first element that satisfy the callback condition
 func (l *Array[T]) Find(callback func(v *T, i int) bool) (res *T) {
 	index := l.FindIndex(callback)
 
@@ -135,20 +135,26 @@ func (l *Array[T]) Find(callback func(v *T, i int) bool) (res *T) {
 	return
 }
 
-// FindIndex return the index of the first element that satisfy the callback condidition
-// Return nil if not found any elements thath matches with the condition
+// FindIndex return the index of the first element that satisfy the callback condition
+// Return nil if not found any elements that matches with the condition
 func (l *Array[T]) FindIndex(callback func(v *T, i int) bool) (res *int) {
+	found := -1
+
 	for index := range *l {
 		if callback(&(*l)[index], index) {
-			*res = index
+			found = index
 			break
 		}
+	}
+
+	if found != -1 {
+		res = &found
 	}
 
 	return
 }
 
-// FindLast return the last element that satisfy the callback condidition
+// FindLast return the last element that satisfy the callback condition
 func (l *Array[T]) FindLast(callback func(v *T, i int) bool) (res *T) {
 	index := l.FindLastIndex(callback)
 
@@ -159,8 +165,8 @@ func (l *Array[T]) FindLast(callback func(v *T, i int) bool) (res *T) {
 	return
 }
 
-// FindLastIndex return the index of the last element that satisfy the callback condidition
-// Return nil if not found any elements thath matches with the condition
+// FindLastIndex return the index of the last element that satisfy the callback condition
+// Return nil if not found any elements that matches with the condition
 func (l *Array[T]) FindLastIndex(callback func(v *T, i int) bool) (res *int) {
 	for index := len(*l) - 1; index >= 0; index-- {
 		if callback(&(*l)[index], index) {
@@ -178,20 +184,20 @@ func (l *Array[T]) Flat() {}
 // FlatMap Cannot be implemented because we can't mix types inside Array
 func (l *Array[T]) FlatMap() {}
 
-// ForEach loop by the Array without modificate the elements.
+// ForEach loop by the Array without modify the elements.
 // But the last argument is the pointer to Array that can be modified
 func (l *Array[T]) ForEach(callback func(value T, index int, array *[]T)) {
-	origintalKind := l.ToOriginalKind()
+	originalKind := l.ToOriginalKind()
 
 	for i := range *l {
-		callback((*l)[i], i, &origintalKind)
+		callback((*l)[i], i, &originalKind)
 	}
 
-	*l = AnyToArrayKind(origintalKind)
+	*l = AnyToArrayKind(originalKind)
 }
 
 /*
-Group return a map of the groupd elements by anything, a fields or a value
+Group return a map of the group elements by anything, a fields or a value
 The callback function must return the value that will be used to group the elements
 If the callback condition returns nil the element won't be added to any group
 */
@@ -247,7 +253,7 @@ Join return a string like result of joining all values by a separator
 	a := Array[int]{1, 2, 3, 4, 5}
 	a.Join(" - ") // will return "1 - 2 - 3 - 4 - 5"
 
-➡ If values are structs, it needs to be the function ToString implemented, returning a string value, Example:
+➡ If values are struct kind, it needs to be the function ToString implemented, returning a string value, Example:
 
 	type Temp struct {
 		msg string
@@ -328,7 +334,7 @@ func (l *Array[T]) Push(values ...T) {
 Reduce iterate all elements one by one and execute a callback that must return a value to be used on the next iteration.
 
 ➡ In the first iteration the accumulator will be nil.
-If the initial values is passed, in the first iteration the accumulator value is seted with the initial value
+If the initial values is passed, in the first iteration the accumulator value is set with the initial value
 
 	s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
 
@@ -356,7 +362,7 @@ func (l *Array[T]) Reduce(callback func(accumulator any, currentValue T, current
 ReduceRight iterate all elements one by one right to left and execute a callback that must return a value to be used on the next iteration.
 
 ➡ In the first iteration the accumulator will be nil.
-If the initial values is passed, in the first iteration the accumulator value is seted with the initial value
+If the initial values is passed, in the first iteration the accumulator value is set with the initial value
 
 	s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
 
@@ -381,11 +387,43 @@ func (l *Array[T]) ReduceRight(callback func(accumulator any, currentValue T, cu
 	return
 }
 
-func (l *Array[T]) Reverse() {}
+// Reverse reverses the original Array
+// The original Array is changed
+func (l *Array[T]) Reverse() {
+	new := make(Array[T], 0)
 
-func (l *Array[T]) Shift() {}
+	for i := len(*l) - 1; i >= 0; i-- {
+		new.Push((*l)[i])
+	}
 
-func (l *Array[T]) Slice() {}
+	*l = new
+}
+
+// Shift remove the first element from this array, and return it.
+// If the array is empty return nil
+func (l *Array[T]) Shift() (res *T) {
+	if len(*l) == 0 {
+		return
+	}
+
+	// Get the index os the fist element
+	first := 0
+
+	// Get the first element to return it
+	res = &(*l)[first]
+
+	// Remove the element from the Array
+	*l = (*l)[1:]
+
+	return
+}
+
+// Slice return a copy of portion of Array
+// The 'start' index is required but the 'end' is optional
+func (l *Array[T]) Slice(start int, end ...int) (res Array[T]) {
+
+	return
+}
 
 func (l *Array[T]) Some() {}
 

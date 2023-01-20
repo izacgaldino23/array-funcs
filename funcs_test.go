@@ -427,6 +427,45 @@ func TestSlice(t *testing.T) {
 		})
 	})
 
+	t.Run("TestReverse", func(t *testing.T) {
+		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+		expected := arrayFuncs.Array[int]{5, 4, 3, 2, 1}
+
+		s.Reverse()
+
+		for i := range expected {
+			assert.Equal(t, expected[i], s[i])
+		}
+	})
+
+	t.Run("TestShift", func(t *testing.T) {
+		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+
+		t.Run("ValidArray", func(t *testing.T) {
+			// Remove last element
+			removed := s.Shift()
+
+			// Check new length
+			assert.Equal(t, 4, len(s))
+
+			// Check the removed element
+			assert.NotNil(t, removed)
+			assert.Equal(t, 1, *removed)
+		})
+
+		t.Run("EmptyArray", func(t *testing.T) {
+			// Validate empty Array
+			s = arrayFuncs.Array[int]{}
+			removed := s.Pop()
+
+			// Check new length
+			assert.Equal(t, 0, len(s))
+
+			// Check the removed element
+			assert.Nil(t, removed)
+		})
+	})
+
 	t.Run("model", func(t *testing.T) {
 		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
 		_ = s
