@@ -1,6 +1,7 @@
 package arrayfuncs_test
 
 import (
+	"fmt"
 	"testing"
 
 	arrayFuncs "github.com/izacgaldino23/array-funcs"
@@ -221,7 +222,7 @@ func TestSlice(t *testing.T) {
 			*array = append(*array, value+1)
 		})
 
-		// Test if the elementes count is changed to double
+		// Test if the elements count is changed to double
 		assert.Equal(t, len(a), 10)
 	})
 
@@ -316,13 +317,12 @@ func TestSlice(t *testing.T) {
 	})
 
 	t.Run("TestMap", func(t *testing.T) {
-		// criação do slice
 		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
-		// aplicação do map
+
 		s.Map(func(v *int, i int) {
 			*v = *v * 2
 		})
-		// verificação se o map foi aplicado corretamente
+
 		for i, v := range s {
 			assert.Equal(t, (i+1)*2, v)
 		}
@@ -464,6 +464,65 @@ func TestSlice(t *testing.T) {
 			// Check the removed element
 			assert.Nil(t, removed)
 		})
+	})
+
+	t.Run("TestSlice", func(t *testing.T) {
+		var (
+			s        = arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+			expected = [][]int{
+				{3, 4, 5},
+				{3, 4},
+				{1, 2, 3},
+				{1, 2, 3, 4, 5},
+			}
+			parameters = [][]int{
+				{2},              // Pass only start
+				{2, 4},           // pass star and end
+				{0, -2},          // Pass star and negative end
+				{0, -len(s) - 1}, // Pass star and negative end greater than len(s)
+			}
+		)
+
+		for i := range expected {
+			var (
+				start, end int
+				result     arrayFuncs.Array[int]
+			)
+
+			start = parameters[i][0]
+
+			if len(parameters[i]) > 1 {
+				end = parameters[i][1]
+
+				result = s.Slice(start, end)
+			} else {
+				result = s.Slice(start)
+			}
+
+			fmt.Println(result)
+			for j, v := range expected[i] {
+				assert.Equal(t, v, result[j])
+			}
+		}
+
+	})
+
+	t.Run("TestSome", func(t *testing.T) {
+		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+
+		// return true
+		result := s.Some(func(v, i int) bool {
+			return v == 3
+		})
+
+		assert.Equal(t, true, result)
+
+		// return false
+		result = s.Some(func(v, i int) bool {
+			return v > 5
+		})
+
+		assert.Equal(t, false, result)
 	})
 
 	t.Run("model", func(t *testing.T) {

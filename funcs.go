@@ -421,11 +421,47 @@ func (l *Array[T]) Shift() (res *T) {
 // Slice return a copy of portion of Array
 // The 'start' index is required but the 'end' is optional
 func (l *Array[T]) Slice(start int, end ...int) (res Array[T]) {
+	var (
+		hasEnd   bool
+		endIndex = 0
+	)
+
+	// verify if end is passed
+	if len(end) > 0 {
+		hasEnd = true
+		endIndex = end[0]
+	}
+
+	// If end is negative we need update it
+	if hasEnd {
+		if endIndex < -len(*l) {
+			hasEnd = false
+		} else if endIndex < 0 {
+			endIndex = endIndex + len(*l)
+		}
+	}
+
+	if hasEnd {
+		res = (*l)[start:endIndex]
+	} else {
+		res = (*l)[start:]
+	}
 
 	return
 }
 
-func (l *Array[T]) Some() {}
+// Some Test if at least one element pass the condition callback
+// If one pass then return true
+func (l *Array[T]) Some(callback func(v T, i int) bool) (res bool) {
+	for i := range *l {
+		if callback((*l)[i], i) {
+			res = true
+			break
+		}
+	}
+
+	return
+}
 
 func (l *Array[T]) Sort() {}
 
