@@ -1,3 +1,4 @@
+// Package arrayfuncs implements the Array type and functions common used on javascript language
 package arrayfuncs
 
 import (
