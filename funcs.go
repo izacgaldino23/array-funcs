@@ -32,6 +32,12 @@ func (l *Array[T]) ToOriginalKind() (res []T) {
 	return
 }
 
+func (l *Array[T]) Append(values ...T) {
+	new := AnyToArrayKind(values)
+
+	*l = l.Concat(&new)
+}
+
 // At return an element based on index
 // accepts negative index, representing decend way
 func (l *Array[T]) At(index int) (res *T) {
@@ -105,12 +111,10 @@ func (l *Array[T]) Fill(value T, start int, end ...int) *Array[T] {
 }
 
 // Filter return the elements that satisfy the callback condition
-func (l *Array[T]) Filter(callback func(v *T, i int) bool) (res []T) {
-	res = make([]T, 0)
-
+func (l *Array[T]) Filter(callback func(v *T, i int) bool) (res Array[T]) {
 	for index := range *l {
 		if callback(&(*l)[index], index) {
-			res = append(res, (*l)[index])
+			res.Append((*l)[index])
 		}
 	}
 

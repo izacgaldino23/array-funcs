@@ -16,9 +16,11 @@ func (t *Temp) ToString() string {
 }
 
 func TestAnyToString(t *testing.T) {
+	assert.Equal(t, "", arrayFuncs.AnyToString(nil))
 	assert.Equal(t, "10", arrayFuncs.AnyToString(10))
 	assert.Equal(t, "true", arrayFuncs.AnyToString(true))
 	assert.Equal(t, "10.5", arrayFuncs.AnyToString(10.5))
+	assert.Equal(t, "temp", arrayFuncs.AnyToString("temp"))
 
 	temp := &Temp{"test"}
 

@@ -29,6 +29,15 @@ func TestSlice(t *testing.T) {
 		}
 	})
 
+	t.Run("TestAppend", func(t *testing.T) {
+		// Array create
+		a := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+
+		a.Append(6, 7)
+
+		assert.Equal(t, 7, len(a))
+	})
+
 	t.Run("TestAt", func(t *testing.T) {
 		// Array create
 		a := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
