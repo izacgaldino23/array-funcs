@@ -27,7 +27,7 @@ func AnyToString(value any) (converted string) {
 	case reflect.Float32:
 		converted = strconv.FormatFloat(float64(valueOf.Interface().(float32)), 'f', -1, 32)
 	case reflect.Float64:
-		converted = strconv.FormatFloat(float64(valueOf.Interface().(float64)), 'f', -1, 64)
+		converted = strconv.FormatFloat(valueOf.Interface().(float64), 'f', -1, 64)
 	case reflect.String:
 		converted = valueOf.Interface().(string)
 	case reflect.Struct:

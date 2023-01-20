@@ -46,7 +46,7 @@ func (l *Array[T]) At(index int) (res *T) {
 		return
 	}
 
-	//If the index is negative when will count back forward
+	// If the index is negative when will count back forward
 	if index < 0 {
 		for index < 0 {
 			index = len(*l) + index
@@ -140,7 +140,7 @@ func (l *Array[T]) Find(callback func(v *T, i int) bool) (res *T) {
 func (l *Array[T]) FindIndex(callback func(v *T, i int) bool) (res *int) {
 	for index := range *l {
 		if callback(&(*l)[index], index) {
-			res = &index
+			*res = index
 			break
 		}
 	}

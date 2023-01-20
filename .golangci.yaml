@@ -16,6 +16,21 @@ linters:
     - revive
     - govet
     - staticcheck
+    - gocyclo
+    - gochecknoglobals
+    - gosimple
+    - goconst
+    - misspell
+    - unconvert
+    - unused
+    - unparam
+    - govet
+    - gocritic
+    - prealloc
+    - exportloopref
+    - staticcheck
+    - gosec
+    - errcheck
 
 output:
   print-issued-name: false
