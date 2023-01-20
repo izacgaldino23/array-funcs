@@ -5,7 +5,7 @@ import "strings"
 type Array[T comparable] []T
 
 /*
-AnyToArrayKind receive a slice of T kind and return a Array[T]
+➡ AnyToArrayKind receive a slice of T kind and return a Array[T]
 	[]int will return Array[int]
 */
 func AnyToArrayKind[T comparable](input []T) (res Array[T]) {
@@ -19,7 +19,7 @@ func AnyToArrayKind[T comparable](input []T) (res Array[T]) {
 }
 
 /*
-ToOriginalKind return a slice with the original kind of array
+➡ ToOriginalKind return a slice with the original kind of array
 	Array[int] will return []int
 */
 func (l *Array[T]) ToOriginalKind() (res []T) {
@@ -53,7 +53,7 @@ func (l *Array[T]) At(index int) (res *T) {
 }
 
 /*
-Concat return a new Array[T] with the Arrays elements
+➡ Concat return a new Array[T] with the Arrays elements
 	a := Array[int]{1, 2}
 	b := Array[int]{3, 4}
 	c := a.Concat(&b) // c is a new Array[int] it value is {1, 2, 3, 4}
@@ -234,6 +234,20 @@ func (l *Array[T]) IndexOf(value T) int {
 	return *res
 }
 
+/*
+➡ Join return a string like result of joining all values by a separator
+	a := Array[int]{1, 2, 3, 4, 5}
+	a.Join(" - ") // will return "1 - 2 - 3 - 4 - 5"
+
+➡ If values are structs, it needs to be the function ToString implemented, returning a string value, Example:
+	type Temp struct {
+		msg string
+	}
+
+	func (t *Temp) ToString() string {
+		return t.msg
+	}
+*/
 func (l *Array[T]) Join(separator string) (res string) {
 	parts := make([]string, 0)
 
