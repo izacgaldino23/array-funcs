@@ -1,5 +1,7 @@
 package arrayfuncs
 
+import "strings"
+
 type Array[T comparable] []T
 
 /*
@@ -232,7 +234,17 @@ func (l *Array[T]) IndexOf(value T) int {
 	return *res
 }
 
-func (l *Array[T]) Join() {}
+func (l *Array[T]) Join(separator string) (res string) {
+	parts := make([]string, 0)
+
+	for i := range *l {
+		parts = append(parts, AnyToString(&(*l)[i]))
+	}
+
+	res = strings.Join(parts, separator)
+
+	return
+}
 
 func (l *Array[T]) Keys() {}
 

@@ -277,6 +277,24 @@ func TestSlice(t *testing.T) {
 		assert.Equal(t, s.IndexOf(6), -1)
 	})
 
+	t.Run("TestJoin", func(t *testing.T) {
+		var (
+			a = arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+			b = arrayFuncs.Array[bool]{true, false, true}
+			c = arrayFuncs.Array[float32]{10.5, 3.4}
+			d = arrayFuncs.Array[Temp]{
+				{"hello"},
+				{"world"},
+			}
+			separator = "-"
+		)
+
+		assert.Equal(t, "1-2-3-4-5", a.Join(separator))
+		assert.Equal(t, "true-false-true", b.Join(separator))
+		assert.Equal(t, "10.5-3.4", c.Join(separator))
+		assert.Equal(t, "hello-world", d.Join(separator))
+	})
+
 	t.Run("model", func(t *testing.T) {})
 
 	t.Run("TestMap", func(t *testing.T) {
