@@ -313,7 +313,18 @@ func (l *Array[T]) Push(values ...T) {
 }
 
 /*
-Reduce
+➡ Reduce iterate all elements one by one and execute a callback that must return a value to be used on the next iteration.
+
+➡ In the first iteration the accumulator will be nil.
+If the initial values is passed, in the first iteration the accumulator value is seted with the initial value
+	s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+
+	sumFunction := func(accumulator any, currentValue, currentIndex int) any {
+		return accumulator.(int) + currentValue
+	}
+
+	result := s.Reduce(sumFunction, 0) // Result will be 0 + 1 + 2 + 3 + 4 + 5 = 15
+➡ If you want right to left use ReduceRight func
 */
 func (l *Array[T]) Reduce(callback func(accumulator any, currentValue T, currentIndex int) any, initialValue ...any) (accumulated any) {
 	if len(initialValue) > 0 {
@@ -327,7 +338,33 @@ func (l *Array[T]) Reduce(callback func(accumulator any, currentValue T, current
 	return
 }
 
-func (l *Array[T]) ReduceRight() {}
+/*
+➡ ReduceRight iterate all elements one by one right to left and execute a callback that must return a value to be used on the next iteration.
+
+➡ In the first iteration the accumulator will be nil.
+If the initial values is passed, in the first iteration the accumulator value is seted with the initial value
+	s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+
+	sumFunction := func(accumulator any, currentValue, currentIndex int) any {
+		return accumulator.(int) + currentValue
+	}
+
+	result := s.ReduceRight(sumFunction, 0) // Result will be 0 + 1 + 2 + 3 + 4 + 5 = 15
+
+➡ If you want left to right use Reduce func
+*/
+func (l *Array[T]) ReduceRight(callback func(accumulator any, currentValue T, currentIndex int) any, initialValue ...any) (accumulated any) {
+	if len(initialValue) > 0 {
+		accumulated = initialValue[0]
+	}
+
+	// for i, v := range *l {
+	for i := len(*l) - 1; i >= 0; i-- {
+		accumulated = callback(accumulated, (*l)[i], i)
+	}
+
+	return
+}
 
 func (l *Array[T]) Reverse() {}
 

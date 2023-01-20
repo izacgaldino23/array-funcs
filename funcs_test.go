@@ -369,14 +369,11 @@ func TestSlice(t *testing.T) {
 		t.Run("SimpleValues", func(t *testing.T) {
 			s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
 
-			sumFunction := func(accumulator int, currentValue, currentIndex int) int {
-				return accumulator + currentValue
-			}
-			_ = sumFunction
-
-			result := s.Reduce(func(accumulator any, currentValue, currentIndex int) any {
+			sumFunction := func(accumulator any, currentValue, currentIndex int) any {
 				return accumulator.(int) + currentValue
-			}, 0)
+			}
+
+			result := s.Reduce(sumFunction, 0)
 
 			assert.Equal(t, 15, result)
 		})
@@ -393,7 +390,38 @@ func TestSlice(t *testing.T) {
 				return accumulator.(string) + " " + currentValue.msg
 			}
 
-			result := s.Reduce(concatFunction, "-> ")
+			result := s.Reduce(concatFunction, "->")
+
+			assert.Equal(t, "-> Hello World Mother Fuckers", result)
+		})
+	})
+
+	t.Run("TestReduceRight", func(t *testing.T) {
+		t.Run("SimpleValues", func(t *testing.T) {
+			s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+
+			sumFunction := func(accumulator any, currentValue, currentIndex int) any {
+				return accumulator.(int) + currentValue
+			}
+
+			result := s.ReduceRight(sumFunction, 0)
+
+			assert.Equal(t, 15, result)
+		})
+
+		t.Run("StructTest", func(t *testing.T) {
+			s := arrayFuncs.Array[Temp]{
+				{"Fuckers"},
+				{"Mother"},
+				{"World"},
+				{"Hello"},
+			}
+
+			concatFunction := func(accumulator any, currentValue Temp, currentIndex int) any {
+				return accumulator.(string) + " " + currentValue.msg
+			}
+
+			result := s.ReduceRight(concatFunction, "->")
 
 			assert.Equal(t, "-> Hello World Mother Fuckers", result)
 		})
