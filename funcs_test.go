@@ -365,6 +365,40 @@ func TestSlice(t *testing.T) {
 		assert.Equal(t, 7, len(a))
 	})
 
+	t.Run("TestReduce", func(t *testing.T) {
+		t.Run("SimpleValues", func(t *testing.T) {
+			s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+
+			sumFunction := func(accumulator int, currentValue, currentIndex int) int {
+				return accumulator + currentValue
+			}
+			_ = sumFunction
+
+			result := s.Reduce(func(accumulator any, currentValue, currentIndex int) any {
+				return accumulator.(int) + currentValue
+			}, 0)
+
+			assert.Equal(t, 15, result)
+		})
+
+		t.Run("StructTest", func(t *testing.T) {
+			s := arrayFuncs.Array[Temp]{
+				{"Hello"},
+				{"World"},
+				{"Mother"},
+				{"Fuckers"},
+			}
+
+			concatFunction := func(accumulator any, currentValue Temp, currentIndex int) any {
+				return accumulator.(string) + " " + currentValue.msg
+			}
+
+			result := s.Reduce(concatFunction, "-> ")
+
+			assert.Equal(t, "-> Hello World Mother Fuckers", result)
+		})
+	})
+
 	t.Run("model", func(t *testing.T) {
 		s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
 		_ = s

@@ -312,7 +312,20 @@ func (l *Array[T]) Push(values ...T) {
 	*l = l.Concat(&new)
 }
 
-func (l *Array[T]) Reduce() {}
+/*
+Reduce
+*/
+func (l *Array[T]) Reduce(callback func(accumulator any, currentValue T, currentIndex int) any, initialValue ...any) (accumulated any) {
+	if len(initialValue) > 0 {
+		accumulated = initialValue[0]
+	}
+
+	for i, v := range *l {
+		accumulated = callback(accumulated, v, i)
+	}
+
+	return
+}
 
 func (l *Array[T]) ReduceRight() {}
 
