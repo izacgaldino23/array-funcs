@@ -2,6 +2,7 @@
 package arrayfuncs
 
 import (
+	"sort"
 	"strings"
 )
 
@@ -336,7 +337,7 @@ Reduce iterate all elements one by one and execute a callback that must return a
 ➡ In the first iteration the accumulator will be nil.
 If the initial values is passed, in the first iteration the accumulator value is set with the initial value
 
-	s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+	s := Array[int]{1, 2, 3, 4, 5}
 
 	sumFunction := func(accumulator any, currentValue, currentIndex int) any {
 		return accumulator.(int) + currentValue
@@ -364,7 +365,7 @@ ReduceRight iterate all elements one by one right to left and execute a callback
 ➡ In the first iteration the accumulator will be nil.
 If the initial values is passed, in the first iteration the accumulator value is set with the initial value
 
-	s := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+	s := Array[int]{1, 2, 3, 4, 5}
 
 	sumFunction := func(accumulator any, currentValue, currentIndex int) any {
 		return accumulator.(int) + currentValue
@@ -463,7 +464,19 @@ func (l *Array[T]) Some(callback func(v T, i int) bool) (res bool) {
 	return
 }
 
-func (l *Array[T]) Sort() {}
+/*
+Sort sorts the Array based on comparable function callback passing the index of the current element and the next element
+
+	a := Array[int]{1, 2, 3, 4, 5}
+	a.Sort(func(index1, index2 int) bool {
+		return a[index1] > a[index2]
+	})
+
+	// 'a' variable now is Array[int]{5, 4, 3, 2, 1}
+*/
+func (l *Array[T]) Sort(callback func(index1, index2 int) bool) {
+	sort.SliceStable(*l, callback)
+}
 
 func (l *Array[T]) Splice() {}
 

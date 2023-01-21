@@ -8,7 +8,8 @@ import (
 )
 
 type Temp struct {
-	msg string
+	msg   string
+	order int
 }
 
 func (t *Temp) ToString() string {
@@ -22,7 +23,7 @@ func TestAnyToString(t *testing.T) {
 	assert.Equal(t, "10.5", arrayFuncs.AnyToString(10.5))
 	assert.Equal(t, "temp", arrayFuncs.AnyToString("temp"))
 
-	temp := &Temp{"test"}
+	temp := &Temp{"test", 1}
 
 	assert.Equal(t, temp.msg, arrayFuncs.AnyToString(temp))
 }

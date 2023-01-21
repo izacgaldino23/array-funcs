@@ -284,8 +284,8 @@ func TestSlice(t *testing.T) {
 			b = arrayFuncs.Array[bool]{true, false, true}
 			c = arrayFuncs.Array[float32]{10.5, 3.4}
 			d = arrayFuncs.Array[Temp]{
-				{"hello"},
-				{"world"},
+				{"hello", 1},
+				{"world", 1},
 			}
 			separator = "-"
 		)
@@ -380,10 +380,10 @@ func TestSlice(t *testing.T) {
 
 		t.Run("StructTest", func(t *testing.T) {
 			s := arrayFuncs.Array[Temp]{
-				{"Hello"},
-				{"World"},
-				{"Mother"},
-				{"Fuckers"},
+				{"Hello", 1},
+				{"World", 1},
+				{"Mother", 1},
+				{"Fuckers", 1},
 			}
 
 			concatFunction := func(accumulator any, currentValue Temp, currentIndex int) any {
@@ -411,10 +411,10 @@ func TestSlice(t *testing.T) {
 
 		t.Run("StructTest", func(t *testing.T) {
 			s := arrayFuncs.Array[Temp]{
-				{"Fuckers"},
-				{"Mother"},
-				{"World"},
-				{"Hello"},
+				{"Fuckers", 1},
+				{"Mother", 1},
+				{"World", 1},
+				{"Hello", 1},
 			}
 
 			concatFunction := func(accumulator any, currentValue Temp, currentIndex int) any {
@@ -523,6 +523,38 @@ func TestSlice(t *testing.T) {
 		})
 
 		assert.Equal(t, false, result)
+	})
+
+	t.Run("model", func(t *testing.T) {
+		var (
+			a        = arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+			expected = []int{5, 4, 3, 2, 1}
+			b        = arrayFuncs.Array[Temp]{
+				Temp{order: 3},
+				Temp{order: 5},
+				Temp{order: 1},
+				Temp{order: 4},
+				Temp{order: 2},
+			}
+		)
+
+		// Normal types
+		a.Sort(func(index1, index2 int) bool {
+			return a[index1] > a[index2]
+		})
+
+		for i := range a {
+			assert.Equal(t, expected[i], a[i])
+		}
+
+		// Using struct
+		b.Sort(func(index1, index2 int) bool {
+			return b[index1].order > b[index2].order
+		})
+
+		for i := range b {
+			assert.Equal(t, expected[i], b[i].order)
+		}
 	})
 
 	t.Run("model", func(t *testing.T) {
