@@ -78,12 +78,6 @@ func (l *Array[T]) Concat(values ...*Array[T]) (res Array[T]) {
 	return
 }
 
-// CopyWithin not implemented yet
-func (l *Array[T]) CopyWithin() {}
-
-// Entries not implemented yet
-func (l *Array[T]) Entries() {}
-
 // Every return true if all elements pass in the test passed by callback function
 // If one element reprove the callback condition will return false
 func (l *Array[T]) Every(callback func(v *T, i int) bool) bool {
@@ -479,8 +473,6 @@ func (l *Array[T]) Sort(callback func(index1, index2 int) bool) {
 }
 
 func (l *Array[T]) Splice() {}
-
-func (l *Array[T]) ToLocaleString() {}
 
 func (l *Array[T]) ToString() {}
 
