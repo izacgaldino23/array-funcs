@@ -1,7 +1,6 @@
 package arrayfuncs_test
 
 import (
-	"fmt"
 	"testing"
 
 	arrayFuncs "github.com/izacgaldino23/array-funcs"
@@ -456,7 +455,7 @@ func TestSlice(t *testing.T) {
 		t.Run("EmptyArray", func(t *testing.T) {
 			// Validate empty Array
 			s = arrayFuncs.Array[int]{}
-			removed := s.Pop()
+			removed := s.Shift()
 
 			// Check new length
 			assert.Equal(t, 0, len(s))
@@ -499,7 +498,6 @@ func TestSlice(t *testing.T) {
 				result = s.Slice(start)
 			}
 
-			fmt.Println(result)
 			for j, v := range expected[i] {
 				assert.Equal(t, v, result[j])
 			}
