@@ -525,7 +525,7 @@ func TestSlice(t *testing.T) {
 		assert.Equal(t, false, result)
 	})
 
-	t.Run("model", func(t *testing.T) {
+	t.Run("TestSort", func(t *testing.T) {
 		var (
 			a        = arrayFuncs.Array[int]{1, 2, 3, 4, 5}
 			expected = []int{5, 4, 3, 2, 1}
@@ -555,6 +555,34 @@ func TestSlice(t *testing.T) {
 		for i := range b {
 			assert.Equal(t, expected[i], b[i].order)
 		}
+	})
+
+	t.Run("TestToString", func(t *testing.T) {
+		var (
+			a         = arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+			separator = " - "
+		)
+
+		// without separator
+		res := a.ToString(nil)
+		assert.Equal(t, "1,2,3,4,5", res)
+
+		// with separator
+		res = a.ToString(&separator)
+		assert.Equal(t, "1 - 2 - 3 - 4 - 5", res)
+
+		// With struct type
+	})
+
+	t.Run("TestUnshift", func(t *testing.T) {
+		// Array create
+		a := arrayFuncs.Array[int]{1, 2, 3, 4, 5}
+
+		a.Unshift(-1, 0)
+
+		assert.Equal(t, 7, len(a))
+
+		assert.Equal(t, 0, a[1])
 	})
 
 	t.Run("model", func(t *testing.T) {

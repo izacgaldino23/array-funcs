@@ -432,7 +432,7 @@ func (l *Array[T]) Slice(start int, end ...int) (res Array[T]) {
 		if endIndex < -len(*l) {
 			hasEnd = false
 		} else if endIndex < 0 {
-			endIndex = endIndex + len(*l)
+			endIndex += len(*l)
 		}
 	}
 
@@ -474,8 +474,49 @@ func (l *Array[T]) Sort(callback func(index1, index2 int) bool) {
 
 func (l *Array[T]) Splice() {}
 
-func (l *Array[T]) ToString() {}
+/*
+ToString return a string containing all values parsed to string.
 
-func (l *Array[T]) Unshift() {}
+The default separator is ","
 
-func (l *Array[T]) Values() {}
+➡ If values are struct kind, it needs to be the function ToString implemented, returning a string value, Example:
+
+	type Temp struct {
+		msg string
+	}
+
+	func (t *Temp) ToString() string {
+		return t.msg
+	}
+*/
+func (l *Array[T]) ToString(separator *string) (res string) {
+	var (
+		parts            = []string{}
+		defaultSeparator = ","
+	)
+
+	if separator == nil {
+		separator = &defaultSeparator
+	}
+
+	for i := range *l {
+		parts = append(parts, AnyToString((*l)[i]))
+	}
+
+	res = strings.Join(parts, *separator)
+
+	return
+}
+
+// Unshift add elements to Array init
+func (l *Array[T]) Unshift(values ...T) (newLength int) {
+	new := AnyToArrayKind(values)
+
+	new.Push(l.ToOriginalKind()...)
+
+	newLength = len(new)
+
+	*l = new
+
+	return
+}
